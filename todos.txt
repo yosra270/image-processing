@@ -6,8 +6,10 @@ build opencv project with qt5 ON
 
 pedestrians detection
 
-
-nadhim l code eli f basics.py (n9assmou aala ++ieurs files)
-
-
 morphological opening and closing
+
+
+nzid icons f menu
+
+
+nchouf mil features.txt chnw bch nzid (yekteb ar9am wela kelmet live w tssir recognition mte3hom)

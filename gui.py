@@ -1,4 +1,4 @@
-from PyQt5.QtCore import  Qt
+from PyQt5.QtCore import  Qt, QSize
 from PyQt5.QtWidgets import (QApplication, QCheckBox, QDialog, QGridLayout,
         QGroupBox, QHBoxLayout, QLabel, QPushButton, QStyleFactory,
         QVBoxLayout, QFileDialog, QMessageBox)
@@ -15,6 +15,7 @@ from threshold import threshold, get_thresholded_image
 from segmentation import segmentation
 from edge_detection import canny_detection, sobel_detection
 from face_and_eyes_detection import detectAndDisplayHumanFaceAndEyes, detectAndDisplayCatFace
+from pedestrians_detection import pedestrians_detection
 
 
 
@@ -25,8 +26,9 @@ class WidgetGallery(QDialog):
         QApplication.setStyle(QStyleFactory.create('Fusion'))
         QApplication.setPalette(QApplication.style().standardPalette())
 
-        self.createTopLeftGroupBox()
-        self.createTopRightGroupBox()
+        self.createSmoothingContrastErosionGroupBox()
+        self.createFaceAndEdgeDetectionGroupBox()
+        self.createPedestriansDetectionAndSegmentationGroupBox()
         self.createOperationsGroupBox()
         self.createBottomLeftImage()
         self.createBottomRightGroupBox()
@@ -53,7 +55,7 @@ class WidgetGallery(QDialog):
     def openFileNameDialog(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        self.fileName, _ = QFileDialog.getOpenFileName(self,"Open Image", "","Image Files (*.JPEG *.JPG *.PNG)", options=options)
+        self.fileName, _ = QFileDialog.getOpenFileName(self,"Open Image", "","Image Files (*.JPEG *.JPG *.PNG *.PGM)", options=options)
         if self.fileName is None:
             sys.exit("Could not open or find the image.")
         self.openImage(self.fileName)
@@ -85,46 +87,71 @@ class WidgetGallery(QDialog):
         self.downLayout.addWidget(saveButton)
 
     def saveFile(self):
-        cv.imwrite(self.fileName, self.currentImg)
+        newFileName = self.fileName
+        if (len(self.currentImg.shape) < 3):
+            extensionPos = self.fileName.rfind('.')
+            newFileName = self.fileName[:extensionPos]+'.pgm' 
+        cv.imwrite(newFileName, self.currentImg)
 
     # Image processing tools : Contrast and Brightness, Smoothing, Erosion and Dilatation, Thresholding
-    def createTopLeftGroupBox(self):
+    def createSmoothingContrastErosionGroupBox(self):
         self.topLeftGroupBox = QGroupBox("")
 
         
         contrastAndBrightnessButton = QPushButton("Contrast and Brightness")
         contrastAndBrightnessButton.setDefault(True)
+        contrastAndBrightnessButton.setFixedSize(QSize(270, 40))
         contrastAndBrightnessButton.clicked.connect(self.startContrastAndBrightnessAdjustements)
 
 
         smoothingButton = QPushButton("Smoothing (Blurring)")
         smoothingButton.setDefault(True)
+        smoothingButton.setFixedSize(QSize(270, 40))
         smoothingButton.clicked.connect(self.startBlurring)
 
         erosionAndDilatationButton = QPushButton("Erosion and Dilation")
         erosionAndDilatationButton.setDefault(True)
+        erosionAndDilatationButton.setFixedSize(QSize(270, 40))
         erosionAndDilatationButton.clicked.connect(self.startErosionAndDilation)
-
-        thresholdButton = QPushButton("Thresholding")
-        thresholdButton.setDefault(True)
-        thresholdButton.clicked.connect(self.startThresholding)
-
-        segmentationButton = QPushButton("Segmentation")
-        segmentationButton.setDefault(True)
-        segmentationButton.clicked.connect(self.startSegmentation)
 
         layout = QVBoxLayout()
         layout.addStretch(1)
         layout.addWidget(contrastAndBrightnessButton)
         layout.addWidget(smoothingButton)
         layout.addWidget(erosionAndDilatationButton)
+        layout.addStretch(1)
+        self.topLeftGroupBox.setLayout(layout)  
+
+    # Image processing tools : Contrast and Brightness, Smoothing, Erosion and Dilatation, Thresholding
+    def createPedestriansDetectionAndSegmentationGroupBox(self):
+        self.pedestriansDetectionGroupBox = QGroupBox("")
+
+        thresholdButton = QPushButton("Thresholding")
+        thresholdButton.setDefault(True)
+        thresholdButton.setFixedSize(QSize(270, 40))
+        thresholdButton.clicked.connect(self.startThresholding)
+
+        segmentationButton = QPushButton("Segmentation")
+        segmentationButton.setDefault(True)
+        segmentationButton.setFixedSize(QSize(270, 40))
+        segmentationButton.clicked.connect(self.startSegmentation)
+
+
+        pedestriansDetectionButton = QPushButton("Pedestrians Detection")
+        pedestriansDetectionButton.setDefault(True)
+        pedestriansDetectionButton.setFixedSize(QSize(270, 40))
+        pedestriansDetectionButton.clicked.connect(pedestrians_detection)
+
+        layout = QVBoxLayout()
+        layout.addStretch(1)
         layout.addWidget(thresholdButton)
         layout.addWidget(segmentationButton)
+        layout.addWidget(pedestriansDetectionButton)
         layout.addStretch(1)
-        self.topLeftGroupBox.setLayout(layout)    
+        self.pedestriansDetectionGroupBox.setLayout(layout)   
 
     # Image processing tools : Segmentation, Edge Detection, Face and Eyes Detection
-    def createTopRightGroupBox(self):
+    def createFaceAndEdgeDetectionGroupBox(self):
 
         self.edgeDetectionGroupBox = QGroupBox("Edge Detection")
         cannyEdgeDetectionButton = QPushButton("Canny Detector")
@@ -156,6 +183,8 @@ class WidgetGallery(QDialog):
 
         self.faceDetectionGroupBox.setLayout(layout)
 
+    
+
     # All processing  tools
     def createOperationsGroupBox(self):
         self.operationsGroupBox = QGroupBox("Operations")
@@ -163,6 +192,7 @@ class WidgetGallery(QDialog):
         operationsLayout.addWidget(self.topLeftGroupBox, 0, 0, 2, 1)
         operationsLayout.addWidget(self.edgeDetectionGroupBox, 0, 1)
         operationsLayout.addWidget(self.faceDetectionGroupBox, 1, 1)
+        operationsLayout.addWidget(self.pedestriansDetectionGroupBox, 0, 2, 2, 1)
         self.operationsGroupBox.setLayout(operationsLayout)
 
     # Image preview
@@ -171,6 +201,7 @@ class WidgetGallery(QDialog):
         self.imageBox = QLabel()
 
         self.openImage("img/default.png", False)
+        self.fileName = "img/default.png"
 
         
         self.avgLabel = QLabel(f"Avg. : {round(average(self.originalImg),2)}\t")
@@ -186,7 +217,10 @@ class WidgetGallery(QDialog):
     
     def openImage(self, fileName="img/default.png", replace_existant=True):
 
-        self.originalImg = cv.imread(cv.samples.findFile(fileName))
+        if fileName.find('.pgm') > 0:
+            self.originalImg = cv.imread(cv.samples.findFile(fileName), cv.IMREAD_GRAYSCALE)
+        else:
+            self.originalImg = cv.imread(cv.samples.findFile(fileName))
         self.currentImg = self.originalImg
         
         pixmap = self.prepareImage(self.originalImg)
@@ -361,8 +395,12 @@ class WidgetGallery(QDialog):
 
     def saveAdjustements(self, k, get_new_image_function): 
         if k == ord("s"):
+            newFileName = self.fileName
             self.currentImg = get_new_image_function()
-            cv.imwrite(self.fileName, self.currentImg)
+            if (len(self.currentImg.shape) < 3):
+                extensionPos = self.fileName.rfind('.')
+                newFileName = self.fileName[:extensionPos]+'.pgm' 
+            cv.imwrite(newFileName, self.currentImg)
             self.updateImageData()
             self.updateImage()
 

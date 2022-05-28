@@ -88,9 +88,9 @@ def adjust_contrast_and_brightness(img):
     cv.namedWindow('Brightness and contrast adjustments')
 
     alpha_init = int(alpha *100)
-    cv.createTrackbar('Alpha gain (contrast)', 'Brightness and contrast adjustments', alpha_init, alpha_max, on_linear_transform_alpha_trackbar)
+    cv.createTrackbar('Alpha gain (brightness)', 'Brightness and contrast adjustments', alpha_init, alpha_max, on_linear_transform_alpha_trackbar)
     beta_init = beta + 100
-    cv.createTrackbar('Beta bias (brightness)', 'Brightness and contrast adjustments', beta_init, beta_max, on_linear_transform_beta_trackbar)
+    cv.createTrackbar('Beta bias (contrast)', 'Brightness and contrast adjustments', beta_init, beta_max, on_linear_transform_beta_trackbar)
 
     on_linear_transform_alpha_trackbar(alpha_init)
     return img_corrected

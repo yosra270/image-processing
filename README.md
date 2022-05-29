@@ -15,3 +15,11 @@ A graphical tool for image processing.
 * Modifcation of  Brightness & Contrast
 
 ![Functionalities implemented](screenshots/functionalities.png)
+
+
+### Conversions
+#### To Gray Scale
+![To Gray Scale](screenshots/to_grayscale.png)
+
+#### To HSV
+![To HSV](screenshots/to_hsv.png)

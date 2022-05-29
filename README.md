@@ -23,3 +23,7 @@ A graphical tool for image processing.
 
 #### To HSV
 ![To HSV](screenshots/to_hsv.png)
+
+### Histogram Equalization
+![Before Histogram Equalization](screenshots/img_before_histo_equalization.png)
+![Histogram Equalization](screenshots/histogram_equalization.png)

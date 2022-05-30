@@ -39,25 +39,25 @@ A graphical tool for image processing.
 ![Save options](screenshots/save_options.png)
 
 ### Contrast and Brightness
-![Contrast and Brightness](screenshots/contrast_brightness.png)
+![Contrast and Brightness](screenshots/contrast_brightness.gif)
 
 ### Blurring
-![Blurring](screenshots/blurring.png)
+![Blurring](screenshots/blurring.gif)
 
 ### Erosion & Dilation
-![Erosion & Dilation](screenshots/erosion_dilation.png)
+![Erosion & Dilation](screenshots/erosion_dilation.gif)
 
 ### Threshodling
-![Threshodling](screenshots/threshodling.png)
+![Threshodling](screenshots/threshodling.gif)
 
 ### Segmentation
-![Segmentation](screenshots/segmentation.png)
+![Segmentation](screenshots/segmentation.gif)
 
 ### Edge detection
 #### Canny detector
-![Canny detector](screenshots/canny_detector.png)
+![Canny detector](screenshots/canny_detector.gif)
 #### Sobel detector
-![Sobel detector](screenshots/sobel_detector.png)
+![Sobel detector](screenshots/sobel_detector.gif)
 
 ### Face detection
 #### Human face and eyes detection
@@ -66,5 +66,5 @@ A graphical tool for image processing.
 ![Cat face detection](screenshots/cat_face_detection.png)
 
 ### People detection
-![People detection](screenshots/pedestrians_detection.png)
+![People detection](screenshots/pedestrians_detection.gif)
 

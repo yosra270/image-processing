@@ -39,7 +39,7 @@ A graphical tool for image processing.
 ![Save options](screenshots/save_options.png)
 
 ### Contrast and Brightness
-![Contrast and Brightness](screenshots/contrast_brightness.gif)
+![Contrast and Brightness](screenshots/contrast_brightess.gif)
 
 ### Blurring
 ![Blurring](screenshots/blurring.gif)
@@ -48,7 +48,7 @@ A graphical tool for image processing.
 ![Erosion & Dilation](screenshots/erosion_dilation.gif)
 
 ### Threshodling
-![Threshodling](screenshots/threshodling.gif)
+![Threshodling](screenshots/thresholding.gif)
 
 ### Segmentation
 ![Segmentation](screenshots/segmentation.gif)
